@@ -1,7 +1,9 @@
 
-all: data.cmi lexer.cmx
-	ocamlopt -o bracket lexer.cmx  
-# ocamlopt -o bracket *.cmx
+all: data.cmi lexer.cmx main.cmx
+	ocamlopt -o bracket lexer.cmx main.cmx
+
+main.cmx:
+	ocamlopt -c main.ml
 
 lexer.cmx:
 	ocamlc -c lexer.mli
