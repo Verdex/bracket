@@ -1,5 +1,5 @@
 
 open Data
 
-val lex : <next : unit -> char> -> token list
+val lex : <current : char; move_next : bool> -> token list
 

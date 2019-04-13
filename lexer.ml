@@ -1,4 +1,16 @@
 
 open Data
 
-let lex (input : <next : unit -> char>) = [Number (5.0, ())]
+let lex (input : <current : char
+                 ;move_next : bool
+                 >) =
+    let ret = ref [] in 
+    while input#move_next do
+        ret := List.cons (Number (5.0, ())) !ret 
+    done
+    ; !ret
+
+
+
+
+
