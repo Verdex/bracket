@@ -67,7 +67,32 @@ let lex_op input =
     done
     ; Op (Buffer.contents ret, start)
 
-let is_line_comment input = ()
+let is_line_comment input = input#current = '/' && input#look_ahead 1 = Some '/'
+
+let lex_line_comment input = 
+    let not_endline c = 
+        match c with
+        | '\n' | '\r' -> false
+        | _ -> true
+    in
+
+    while input#move_next && not_endline input#current do
+        ()
+    done
+
+let is_block_comment input = input#current = '/' && input#look_ahead 1 = Some '*'
+
+let lex_block_comment input = 
+    let not_end_block input = not( input#current = '*' && input#look_ahead 1 = Some '/' )
+    in
+
+    let eat x = ()
+    in
+
+    while input#move_next && not_end_block input do
+        ()
+    done
+    ; eat input#move_next
 
 let lex (input : <current : char
                  ;index : int
@@ -77,6 +102,8 @@ let lex (input : <current : char
     let ret = ref [] in 
     while input#move_next do
         match input#current with
+        | _ when is_line_comment input -> lex_line_comment input
+        | _ when is_block_comment input -> lex_block_comment input 
         | '(' -> ret := LParen input#index :: !ret 
         | ')' -> ret := RParen input#index :: !ret 
         | '{' -> ret := LCurl input#index :: !ret 

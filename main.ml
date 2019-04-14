@@ -7,13 +7,19 @@ let value = lex (object
         val stuff = {|blah123_ _blah
                       &*&^ ?
                       100
+                      // blah blah blah
                       []
                       {}
                       ()
+                      /* comment1
+                      comment2
+                      commeent3 commengt5
+                      */
                       ,
                       ;
                       1.0
-                     *|} 
+                     *
+                     //|} 
         method move_next = 
             if _index < String.length stuff - 1 then begin
                 _index <- _index + 1
