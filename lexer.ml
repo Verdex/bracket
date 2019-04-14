@@ -86,7 +86,7 @@ let lex_block_comment input =
     let not_end_block input = not( input#current = '*' && input#look_ahead 1 = Some '/' )
     in
 
-    let eat x = ()
+    let eat _ = ()
     in
 
     while input#move_next && not_end_block input do
