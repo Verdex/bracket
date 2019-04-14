@@ -3,6 +3,28 @@ open List
 open Data
 open Str
 
+let is_number c = 
+    match c with
+    | '0' .. '9' -> true
+    | _ -> false
+
+let is_number_or_dot c =
+    match c with
+    | '0' .. '9' -> true
+    | '.' -> true
+    | _ -> false
+
+(* TODO add hex support *)
+(* TODO add bin support *)
+let lex_number input = 
+    let start = input#index in
+    let ret = Buffer.create 16 in
+    Buffer.add_char ret input#current
+    ; while input#move_next && is_number_or_dot input#current do
+        Buffer.add_char ret input#current
+    done
+    ; Number (Buffer.contents ret, start)
+
 let is_whitespace c = 
     match c with
     | '\t' | '\n' | '\r' | ' ' -> true
@@ -53,8 +75,9 @@ let lex (input : <current : char
     while input#move_next do
         match input#current with
         | c when is_whitespace c -> ()
-        | c when is_op c -> ret := lex_op input :: !ret
         | c when is_symbol_start c -> ret := lex_symbol input :: !ret
+        | c when is_number c -> ret := lex_number input :: !ret
+        | c when is_op c -> ret := lex_op input :: !ret
     done
     ; rev !ret
 
