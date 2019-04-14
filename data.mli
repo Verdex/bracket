@@ -1,5 +1,5 @@
 
-type meta_data = ()
+type meta_data = int
 
 type token = 
     | String of string * meta_data
