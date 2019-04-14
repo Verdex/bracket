@@ -7,6 +7,11 @@ let value = lex (object
         val stuff = {|blah123_ _blah
                       &*&^ ?
                       100
+                      []
+                      {}
+                      ()
+                      ,
+                      ;
                       1.0
                      *|} 
         method move_next = 
@@ -25,6 +30,14 @@ let p = function
     | Number (n,i) -> Printf.sprintf "number %s %d" n i
     | Symbol (s,i) -> Printf.sprintf "symbol %s %d" s i
     | Op (o,i) -> Printf.sprintf "op %s %d" o i
+    | Comma i -> Printf.sprintf "comma %d" i
+    | Semi i -> Printf.sprintf "semi %d" i
+    | LCurl i -> Printf.sprintf "lcurl %d" i
+    | RCurl i -> Printf.sprintf "rcurl %d" i
+    | LParen i -> Printf.sprintf "lparen %d" i
+    | RParen i -> Printf.sprintf "rparen %d" i
+    | LSquare i -> Printf.sprintf "lsquare %d" i
+    | RSquare i -> Printf.sprintf "rsqure %d" i
     | _ -> "empty" ;;
 
 List.iter (fun x -> Printf.printf "%s\n" (p x)) value

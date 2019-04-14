@@ -74,10 +74,19 @@ let lex (input : <current : char
     let ret = ref [] in 
     while input#move_next do
         match input#current with
+        | '(' -> ret := LParen input#index :: !ret 
+        | ')' -> ret := RParen input#index :: !ret 
+        | '{' -> ret := LCurl input#index :: !ret 
+        | '}' -> ret := RCurl input#index :: !ret 
+        | '[' -> ret := LSquare input#index :: !ret
+        | ']' -> ret := RSquare input#index :: !ret
+        | ',' -> ret := Comma input#index :: !ret 
+        | ';' -> ret := Semi input#index :: !ret 
         | c when is_whitespace c -> ()
-        | c when is_symbol_start c -> ret := lex_symbol input :: !ret
+        | c when is_symbol_start c -> ret := lex_symbol input :: !ret 
         | c when is_number c -> ret := lex_number input :: !ret
-        | c when is_op c -> ret := lex_op input :: !ret
+        | c when is_op c -> ret := lex_op input :: !ret 
+        | _ -> ()
     done
     ; rev !ret
 
