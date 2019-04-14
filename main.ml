@@ -4,7 +4,9 @@ open Data
 
 let value = lex (object
         val mutable _index = -1
-        val stuff = {|blah123_|} 
+        val stuff = {|blah123_ _blah
+                      &*&^ ?
+                     *|} 
         method move_next = 
             if _index < String.length stuff - 1 then begin
                 _index <- _index + 1

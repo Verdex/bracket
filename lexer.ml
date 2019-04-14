@@ -3,6 +3,10 @@ open List
 open Data
 open Str
 
+let is_whitespace c = 
+    match c with
+    | '\t' | '\n' | '\r' | ' ' -> true
+    | _ -> false
 
 let is_symbol_start c = 
     match c with
@@ -48,6 +52,7 @@ let lex (input : <current : char
     let ret = ref [] in 
     while input#move_next do
         match input#current with
+        | c when is_whitespace c -> ()
         | c when is_op c -> ret := lex_op input :: !ret
         | c when is_symbol_start c -> ret := lex_symbol input :: !ret
     done
