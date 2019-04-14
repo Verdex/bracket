@@ -23,6 +23,11 @@ let value = lex (object
                 false
         method current = stuff.[_index]  
         method index = _index
+        method look_ahead a = 
+            if _index + a  < String.length stuff then
+                Some stuff.[_index + a]
+            else
+                None
      end
      );;
 

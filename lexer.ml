@@ -67,9 +67,12 @@ let lex_op input =
     done
     ; Op (Buffer.contents ret, start)
 
+let is_line_comment input = ()
+
 let lex (input : <current : char
                  ;index : int
                  ;move_next : bool
+                 ;look_ahead : int -> char option
                  >) =
     let ret = ref [] in 
     while input#move_next do
