@@ -16,6 +16,8 @@ let value = lex (object
                       commeent3 commengt5
                       */
                       ,
+                      "blah ikky
+                      sap wow"
                       ;
                       1.0
                      *
@@ -49,7 +51,8 @@ let p = function
     | RParen i -> Printf.sprintf "rparen %d" i
     | LSquare i -> Printf.sprintf "lsquare %d" i
     | RSquare i -> Printf.sprintf "rsqure %d" i
-    | _ -> "empty" ;;
+    | String (v,i) -> Printf.sprintf "string %s %d" v i 
+    ;;
 
 List.iter (fun x -> Printf.printf "%s\n" (p x)) value
 

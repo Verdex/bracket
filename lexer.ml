@@ -81,7 +81,7 @@ let lex_line_comment input =
     done
 
 let is_block_comment input = input#current = '/' && input#look_ahead 1 = Some '*'
-
+(* TODO nested comments *)
 let lex_block_comment input = 
     let not_end_block input = not( input#current = '*' && input#look_ahead 1 = Some '/' )
     in
@@ -94,6 +94,15 @@ let lex_block_comment input =
     done
     ; eat input#move_next
 
+(* TODO string interp *)
+let lex_string input =  
+    let start = input#index in
+    let ret = Buffer.create 16 in
+    while input#move_next && input#current <> '"' do
+        Buffer.add_char ret input#current
+    done
+    ; String (Buffer.contents ret, start)
+
 let lex (input : <current : char
                  ;index : int
                  ;move_next : bool
@@ -102,6 +111,7 @@ let lex (input : <current : char
     let ret = ref [] in 
     while input#move_next do
         match input#current with
+        | c when is_whitespace c -> ()
         | _ when is_line_comment input -> lex_line_comment input
         | _ when is_block_comment input -> lex_block_comment input 
         | '(' -> ret := LParen input#index :: !ret 
@@ -112,10 +122,10 @@ let lex (input : <current : char
         | ']' -> ret := RSquare input#index :: !ret
         | ',' -> ret := Comma input#index :: !ret 
         | ';' -> ret := Semi input#index :: !ret 
-        | c when is_whitespace c -> ()
         | c when is_symbol_start c -> ret := lex_symbol input :: !ret 
         | c when is_number c -> ret := lex_number input :: !ret
         | c when is_op c -> ret := lex_op input :: !ret 
+        | '"' -> ret := lex_string input :: !ret 
         | _ -> ()
     done
     ; rev !ret
