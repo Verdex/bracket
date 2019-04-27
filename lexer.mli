@@ -1,6 +1,8 @@
 
 open Data
 
+exception LexError of int * char * string
+
 val lex : <current : char
           ;index : int
           ;move_next : bool

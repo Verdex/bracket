@@ -3,6 +3,8 @@ open List
 open Data
 open Str
 
+exception LexError of int * char * string
+
 let is_number c = 
     match c with
     | '0' .. '9' -> true
@@ -92,6 +94,8 @@ let lex_block_comment input =
     while input#move_next && not_end_block input do
         ()
     done
+    ; if input#current <> '*' && input#look_ahead 1 = Some '/' then
+        raise (LexError (input#index, input#current, "block comment lexer"))
     ; eat input#move_next
 
 (* TODO string interp *)
@@ -101,6 +105,8 @@ let lex_string input =
     while input#move_next && input#current <> '"' do
         Buffer.add_char ret input#current
     done
+    ; if input#current <> '"' then
+        raise (LexError (input#index, input#current, "string lexer"))
     ; String (Buffer.contents ret, start)
 
 let lex (input : <current : char
